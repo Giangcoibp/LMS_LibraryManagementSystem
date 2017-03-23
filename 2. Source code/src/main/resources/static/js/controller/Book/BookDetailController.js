@@ -1,6 +1,9 @@
 var app = angular.module('myAdmin');
-app.controller("BookController", function($scope, $http, $routeParams) {
+app.controller("BookDetailController", function($scope, $resource, $http, $routeParams) {
+	$scope.book = {};
 	$scope.updatebook = {};
+	$scope.image;
+	$scope.imageUpdate;
 	$scope.isbn = $routeParams.isbn;
 	$scope.authors = [];
 	$scope.categories = [];
@@ -25,6 +28,7 @@ app.controller("BookController", function($scope, $http, $routeParams) {
 	getPublisherData();
 	var size=10;	
 	
+	// Add book
 	$scope.addBook = function() {
 		$scope.book = {
 			"isbn" : $scope.book.isbn,
@@ -57,7 +61,8 @@ app.controller("BookController", function($scope, $http, $routeParams) {
 		});
 
 	}
-
+	
+	// Update book
 	$scope.updateBook = function() {
 		$scope.updatebook = {
 			"isbn" : $routeParams.isbn,
@@ -85,17 +90,6 @@ app.controller("BookController", function($scope, $http, $routeParams) {
 					console.log('edit book OK');
 				}).error(function(data, status, headers, config) {
 		});
-	}
-
-	$scope.removeBook = function(isbn) {
-		$http.get("http://localhost:9000/LMS/book/remove/" + isbn)
-		.success(function(){
-			getData();
-			console.log('remove book OK');
-		})
-		.error(function(){
-			getData();
-		})
 	}
 	
 	// angular.element('#upload').click();
@@ -142,6 +136,7 @@ app.controller("BookController", function($scope, $http, $routeParams) {
 			url : "http://localhost:9000/LMS/book/get/" + isbn
 		}).success(function(data, status, headers, config) {
 			$scope.updatebook = data;
+			$scope.imageUpdate = 'http://covers.openlibrary.org/b/isbn/' + $scope.updatebook.isbn + '-M.jpg'
 			console.log("load book by isbn: ok");
 			console.log($scope.updatebook);
 		}).error(function(data, status, headers, config) {
@@ -236,39 +231,21 @@ app.controller("BookController", function($scope, $http, $routeParams) {
 		});
 	}
 	
-	//Start Paging
-	$scope.incPaging = function(currentPage){
-		if(currentPage == $scope.totalPages){
-			
-		}else{
-			pageNumb = parseInt(currentPage)+1;
-			$scope.currentPage = pageNumb;	
-			$http({
-				method: 'get',
-				url: "http://localhost:9000/LMS/book/findAll?page="+(pageNumb-1)+"&size="+size
-			}).success(function(data, status, headers, config){
-				$scope.books = data.content;			
-			})
-			.error(function(data, status, headers, config){});
-		}	
-	}
-	
-	$scope.desPaging = function(currentPage){
-		if(currentPage == 1){
-			
-		}else{
-			pageNumb = parseInt(currentPage)-1;
-			$scope.currentPage = pageNumb;	
-			$http({
-				method: 'get',
-				url: "http://localhost:9000/LMS/book/findAll?page="+(pageNumb-1)+"&size="+size
-			}).success(function(data, status, headers, config){
-				$scope.books = data.content;			
-			})
-			.error(function(data, status, headers, config){});
-		}		
-	}
-	//end Paging
+	$scope.$watch('book.isbn', function(value) {
+		$http({
+			method : 'get',
+			url : 'http://localhost:9000/LMS/book/check/' + value
+		}).success(function(data, status, headers, config) {
+			if (data == true) {				
+				$scope.image = 'http://covers.openlibrary.org/b/isbn/' + value + '-M.jpg';
+			}
+			else {
+				bookCoverSrc = 'not found';
+				$scope.image = 'images/BOOKS/defaultbookcover.jpg';
+			}
+		}).error(function(data, status, headers, config) {
+		});
+	});
 });
 
 app.directive('checkIsbn1', function($http) {
