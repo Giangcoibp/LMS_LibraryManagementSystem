@@ -43,8 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 /*.antMatchers("/index").permitAll()*/
                 .antMatchers("/index").hasRole("MEMBER")
                 
-                
                 .antMatchers("/book/list").permitAll()
+                .antMatchers("/userInfo/add").permitAll()
                 .antMatchers("/book/findAll/**").permitAll()
                 .antMatchers("/book/get/**").permitAll()
                 .antMatchers("/book/edit").hasRole("MEMBER")
@@ -61,6 +61,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/publisher/findAll/**").permitAll()
                 .antMatchers("/publisher/get/**").permitAll()
                 
+                //.antMatchers("/userInfo/**").hasRole("MEMBER")
+                .antMatchers("/book/check/**").permitAll()
+                
                 .antMatchers("/ticket/add").hasRole("MEMBER")
                 .antMatchers("/ticket/get/**").hasRole("MEMBER")
                 
@@ -71,7 +74,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/publisher/**").hasRole("ADMIN")
                 .antMatchers("/returnBook/**").hasRole("ADMIN")
                 .antMatchers("/ticket/**").hasRole("ADMIN")
-                .antMatchers("/userInfo/**").hasRole("ADMIN")
                 .antMatchers("/publisher/**").hasRole("ADMIN")
                 .antMatchers("/returnBook/**").hasRole("ADMIN")
                 .antMatchers("/admin").hasRole("ADMIN")

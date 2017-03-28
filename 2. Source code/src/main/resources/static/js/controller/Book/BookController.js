@@ -7,7 +7,6 @@ app.controller("BookController", function($scope, $http) {
 	$scope.orderByMe = function(x) {
 		$scope.myOrderBy = x;
 	}
-	
 	function getData() {
 		$http({
 			method : 'get',
@@ -25,6 +24,8 @@ app.controller("BookController", function($scope, $http) {
 	
 	// Remove book
 	$scope.removeBook = function(isbn) {
+		$('#myModalDelete-' + isbn).modal().hide();
+		$('.modal-backdrop').hide();
 		$http.get("http://localhost:9000/LMS/book/remove/" + isbn)
 		.success(function(){
 			getData();

@@ -1,5 +1,5 @@
-var app = angular.module('myAdmin');
-app.controller("userDetailCtr", function($scope, $http, $routeParams) {
+var app = angular.module('myApp');
+app.controller("UserHomeDetail", function($scope, $http, $routeParams) {
 	$scope.EditUser = function() {
 		$scope.temp = {
 			userId : $scope.iduser,

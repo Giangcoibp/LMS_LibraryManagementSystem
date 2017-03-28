@@ -23,6 +23,10 @@ public class UserInfoService {
 		return (List<UserInfo>) userInfoDao.findAll();
 	}
 
+	public UserInfo findByEmail(String email) {
+		return userInfoDao.findByEmail(email);
+	}
+	
 	public Page<UserInfo> findAll(Pageable pageable) {
 		return userInfoDao.findAll(pageable);
 	}
@@ -39,5 +43,17 @@ public class UserInfoService {
 
 	public UserInfo getUserInfo(int id) {
 		return userInfoDao.findOne(id);
+	}
+	
+	public int getTotalUser() {
+		return ((List<UserInfo>) userInfoDao.findAll()).size();
+	}
+	
+	public int getTotalMale() {
+		return ((List<UserInfo>) userInfoDao.findBySex("Male")).size();
+	}
+	
+	public int getTotalFemale() {
+		return ((List<UserInfo>) userInfoDao.findBySex("Female")).size();
 	}
 }
